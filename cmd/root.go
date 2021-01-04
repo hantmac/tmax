@@ -19,12 +19,15 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
+	"tmax/internal/core"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
+var Args core.Argument
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -32,9 +35,19 @@ var rootCmd = &cobra.Command{
 	Short: "tmax get the cmd you want at lightning speed",
 	Long: `The positioning of tmax is a command line tool with a little artificial intelligence. 
 If you frequently deal with the terminal daily, tmax will greatly improve your work efficiency.`,
+	Args: cobra.ArbitraryArgs,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			fmt.Println(Args[strings.Join(args, " ")])
+			core.Executor(Args[strings.Join(args, " ")])
+		} else {
+			fmt.Println("interactive mode")
+			//interactive mode
+		}
+
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -48,6 +61,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	Args = core.TransferYamlToMap("~/.tmax.yaml")
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -73,9 +87,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".tmax" (without extension).
+		// Search config in home directory with name ".tmax.yaml" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".tmax")
+		viper.SetConfigName(".tmax.yaml")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

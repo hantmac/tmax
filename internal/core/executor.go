@@ -19,7 +19,7 @@ func Executor(s string) {
 		return
 	}
 
-	cmd := exec.Command("/bin/sh", "-c ", s)
+	cmd := exec.Command("/bin/sh", "-c", s)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -37,7 +37,7 @@ func ExecuteAndGetResult(s string) string {
 	}
 
 	out := &bytes.Buffer{}
-	cmd := exec.Command("/bin/sh", "-c ", s)
+	cmd := exec.Command("/bin/sh", "-c", s)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = out
 	if err := cmd.Run(); err != nil {
