@@ -28,8 +28,8 @@ import (
 var tmaxDefaultConf = `
 ---
 k8s:
-  filtenodecpu: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"
-  filternodetaint: kubectl get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{'\t'}{.spec.taints[*].key}{'\n'}{end}"
+  filternodecpu: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"
+  filternodetaint: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.spec.taints[*].key}{'\n'}{end}"
   allnode: kubectl get no
   alldeploy: kubectl get deploy
   allpod: kubectl get pod -A
