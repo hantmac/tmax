@@ -22,20 +22,19 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"path"
+	"tmax/internal/core"
 )
 
 var tmaxDefaultConf = `
 ---
 k8s:
-  node:
-    filtercpu: ''
-    filtertaint: ''
-    allnode: ''
-  deployment:
-    alldeploy: ''
-  pod:
-    allpod: ''
-    podResource: ''
+  filtenodecpu: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"
+  filternodetaint: kubectl get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{'\t'}{.spec.taints[*].key}{'\n'}{end}"
+  allnode: kubectl get no
+  alldeploy: kubectl get deploy
+  allpod: kubectl get pod -A
+  allnodeip: kubectl get node -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.addresses[0].address}{'\n'}{end}"
+  podResource: kubectl get pod -o custom-columns=NAME:metadata.name,podIP:status.podIP,hostIp:spec.containers[0].resources | grep 8Gi
 my:
   check: curl 127.0.0.1:8080/@in/api/health
 unix:
@@ -53,7 +52,7 @@ var generateCmd = &cobra.Command{
 			log.Errorf("get home dir failed: %v", err)
 		}
 		fileName := path.Join(homedirStr, ".tmax.yaml")
-		if ExistFile(fileName) {
+		if core.ExistFile(fileName) {
 			log.Errorf("the .tmax.yaml already exist")
 			return
 		}
@@ -85,7 +84,6 @@ func init() {
 	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ExistFile(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil || !os.IsNotExist(err)
-}
+
+
+
