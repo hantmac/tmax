@@ -47,26 +47,7 @@ var generateCmd = &cobra.Command{
 	Short: "generate default cmd config",
 	Long:  `generate default cmd config`,
 	Run: func(cmd *cobra.Command, args []string) {
-		homedirStr, err := homedir.Dir()
-		if err != nil {
-			log.Errorf("get home dir failed: %v", err)
-		}
-		fileName := path.Join(homedirStr, ".tmax.yaml")
-		if core.ExistFile(fileName) {
-			log.Errorf("the .tmax.yaml already exist")
-			return
-		}
-		f, err := os.Create(fileName)
-		if err != nil {
-			log.Errorf("open tmax.yaml failed")
-			return
-		} else {
-			_, err = f.Write([]byte(tmaxDefaultConf))
-		}
-		defer f.Close()
-
-		fmt.Println(" tmax.yaml generated in ~/.tmax.yaml")
-
+		GenerateTmaxYaml()
 	},
 }
 
@@ -84,6 +65,24 @@ func init() {
 	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+func GenerateTmaxYaml() {
+	homedirStr, err := homedir.Dir()
+	if err != nil {
+		log.Errorf("get home dir failed: %v", err)
+	}
+	fileName := path.Join(homedirStr, ".tmax.yaml")
+	if core.ExistFile(fileName) {
+		log.Errorf("the .tmax.yaml already exist")
+		return
+	}
+	f, err := os.Create(fileName)
+	if err != nil {
+		log.Errorf("open tmax.yaml failed")
+		return
+	} else {
+		_, err = f.Write([]byte(tmaxDefaultConf))
+	}
+	defer f.Close()
 
-
-
+	fmt.Println(" tmax.yaml generated in ~/.tmax.yaml")
+}
