@@ -1,6 +1,7 @@
 package core
 
 import (
+	"github.com/c-bata/go-prompt"
 	"github.com/google/martian/log"
 	"github.com/mitchellh/go-homedir"
 	"gopkg.in/yaml.v2"
@@ -10,6 +11,8 @@ import (
 )
 
 type Argument map[string]string
+
+var Args Argument
 
 func TransferYamlToMap(fileName string) Argument {
 	args := Argument{}
@@ -30,7 +33,7 @@ func TransferYamlToMap(fileName string) Argument {
 	}
 
 	for _, v := range m {
-		for k, value := range  v {
+		for k, value := range v {
 			args[k] = value
 		}
 	}
@@ -41,4 +44,22 @@ func TransferYamlToMap(fileName string) Argument {
 func ExistFile(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || !os.IsNotExist(err)
+}
+
+func Complete(d prompt.Document) []prompt.Suggest {
+
+	var s []prompt.Suggest
+
+	t := []prompt.Suggest{
+		{Text: "exit", Description: "exit"},
+	}
+
+	args := TransferYamlToMap("~/.tmax.yaml")
+	for k, v := range args {
+		s = append(s, prompt.Suggest{Text: k, Description: v})
+	}
+
+	s = append(s, t...)
+
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
