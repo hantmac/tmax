@@ -17,6 +17,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/c-bata/go-prompt"
+	"github.com/c-bata/go-prompt/completer"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -26,8 +28,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
-var Args core.Argument
+var (
+	cfgFile  string
+
+	version  string
+	revision string
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -40,11 +46,22 @@ If you frequently deal with the terminal daily, tmax will greatly improve your w
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
-			fmt.Println(Args[strings.Join(args, " ")])
-			core.Executor(Args[strings.Join(args, " ")])
+			fmt.Println(core.Args[strings.Join(args, " ")])
+			core.Executor(core.Args[strings.Join(args, " ")])
 		} else {
 			fmt.Println("interactive mode")
+			fmt.Printf("tmax %s (rev-%s)\n", version, revision)
+			fmt.Println("Please use `exit` or `Ctrl-D` to exit this program.")
 			//interactive mode
+			p := prompt.New(
+				core.ExecutorForInteractive,
+				core.Complete,
+				prompt.OptionTitle("tmax: interactive client"),
+				prompt.OptionPrefix(">>> "),
+				prompt.OptionInputTextColor(prompt.Cyan),
+				prompt.OptionCompletionWordSeparator(completer.FilePathCompletionSeparator),
+			)
+			p.Run()
 		}
 
 	},
@@ -61,7 +78,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	Args = core.TransferYamlToMap("~/.tmax.yaml")
+	core.Args = core.TransferYamlToMap("~/.tmax.yaml")
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -99,3 +116,5 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
+
+

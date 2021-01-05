@@ -9,6 +9,21 @@ import (
 	"tmax/internal/debug"
 )
 
+// ExecutorForInteractive find real cmd and exec it
+func ExecutorForInteractive(s string) {
+
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return
+	} else if s == "quit" || s == "exit" {
+		fmt.Println("Bye!")
+		os.Exit(0)
+		return
+	}
+
+	Executor(Args[s])
+}
+
 func Executor(s string) {
 	s = strings.TrimSpace(s)
 	if s == "" {
