@@ -61,5 +61,5 @@ func Complete(d prompt.Document) []prompt.Suggest {
 
 	s = append(s, t...)
 
-	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+	return prompt.FilterFuzzy(s, d.GetWordBeforeCursor(), true)
 }
