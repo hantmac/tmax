@@ -18,11 +18,10 @@ package cmd
 import (
 	"fmt"
 	"github.com/google/martian/log"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"os"
-	"path"
 	"tmax/internal/core"
+	"tmax/setting"
 )
 
 var tmaxDefaultConf = `
@@ -68,16 +67,11 @@ func init() {
 }
 
 func GenerateTmaxYaml() {
-	homedirStr, err := homedir.Dir()
-	if err != nil {
-		log.Errorf("get home dir failed: %v", err)
-	}
-	fileName := path.Join(homedirStr, ".tmax.yaml")
-	if core.ExistFile(fileName) {
+	if core.ExistFile(setting.FileName) {
 		log.Errorf("the .tmax.yaml already exist")
 		return
 	}
-	f, err := os.Create(fileName)
+	f, err := os.Create(setting.FileName)
 	if err != nil {
 		log.Errorf("open tmax.yaml failed")
 		return

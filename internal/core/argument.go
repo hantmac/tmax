@@ -3,11 +3,10 @@ package core
 import (
 	"github.com/c-bata/go-prompt"
 	"github.com/google/martian/log"
-	"github.com/mitchellh/go-homedir"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
-	"path"
+	"tmax/setting"
 )
 
 type Argument map[string]string
@@ -18,11 +17,6 @@ var Args Argument
 func TransYamlToOutMap(fileName string) OutMap {
 
 	m := OutMap{}
-	homedirStr, err := homedir.Dir()
-	if err != nil {
-		log.Errorf("get home dir failed: %v", err)
-	}
-	fileName = path.Join(homedirStr, ".tmax.yaml")
 	if !ExistFile(fileName) {
 		log.Errorf("the .tmax.yaml not exist, please use `tmax generate` to get it ")
 		return m
@@ -87,7 +81,7 @@ func Complete(d prompt.Document) []prompt.Suggest {
 		{Text: "exit", Description: "exit"},
 	}
 
-	args := TransferYamlToMap("~/.tmax.yaml")
+	args := TransferYamlToMap(setting.FileName)
 	for k, v := range args {
 		s = append(s, prompt.Suggest{Text: k, Description: v})
 	}

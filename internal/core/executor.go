@@ -25,6 +25,9 @@ func ExecutorForInteractive(s string) {
 }
 
 func Executor(s string) {
+
+	fmt.Println(s)
+
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return
