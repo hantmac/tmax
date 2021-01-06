@@ -19,15 +19,16 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"tmax/internal/core"
+	"tmax/setting"
 )
 
-var rmTmaxYaml = "rm ~/.tmax.yaml"
+var rmTmaxYaml = "rm " + setting.FileName
 
 // clearCmd represents the clear command
 var clearCmd = &cobra.Command{
 	Use:   "clear",
 	Short: "rm ~/.tmax.yaml",
-	Long: `rm ~/.tmax.yaml`,
+	Long:  `rm ~/.tmax.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		core.Executor(rmTmaxYaml)
 

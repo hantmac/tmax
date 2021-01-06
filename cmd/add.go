@@ -18,11 +18,10 @@ package cmd
 import (
 	"fmt"
 	"github.com/google/martian/log"
-	"github.com/mitchellh/go-homedir"
 	"os"
-	"path"
 	"strings"
 	"tmax/internal/core"
+	"tmax/setting"
 
 	"github.com/spf13/cobra"
 )
@@ -34,6 +33,7 @@ var addCmd = &cobra.Command{
 	Long: `add a command to tmax.yaml, the format is "group:cmdKey:cmdValue", 
 example: k8s:getpod:kubectl get pod
 `,
+// support add cmd like k8s:getpod:kubectl get pod
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("add called")
@@ -43,7 +43,7 @@ example: k8s:getpod:kubectl get pod
 		if len(ss) == 3 {
 			m := make(map[string]string)
 			m[ss[1]] = ss[2]
-			outMap := core.TransYamlToOutMap("~/.tmax.yaml")
+			outMap := core.TransYamlToOutMap(setting.FileName)
 			outMap.InsertToMap(ss[0], m)
 
 			b, err := core.TransMapToYaml(outMap)
@@ -52,22 +52,17 @@ example: k8s:getpod:kubectl get pod
 				return
 			}
 
-			homedirStr, err := homedir.Dir()
-			if err != nil {
-				log.Errorf("get home dir failed: %v", err)
-			}
-			fileName := path.Join(homedirStr, ".tmax.yaml")
-			f, err := os.OpenFile(fileName, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0766)
+			// re-write tmax.yaml
+			f, err := os.OpenFile(setting.FileName, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0766)
 
 			if err != nil {
-				log.Errorf("open .tmax.yaml failed, %v",err)
+				log.Errorf("open .tmax.yaml failed, %v", err)
 				return
 			}
 			_, err = f.Write(b)
 			if err != nil {
 				log.Errorf("write .tmax.yaml failed, %v", err)
 			}
-
 
 		} else {
 			fmt.Println("add cmd failed")

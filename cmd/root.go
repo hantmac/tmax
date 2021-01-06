@@ -23,6 +23,7 @@ import (
 	"os"
 	"strings"
 	"tmax/internal/core"
+	"tmax/setting"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -78,7 +79,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	core.Args = core.TransferYamlToMap("~/.tmax.yaml")
+	core.Args = core.TransferYamlToMap(setting.FileName)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
