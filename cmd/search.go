@@ -48,7 +48,7 @@ to quickly create a Cobra application.`,
 		_, result, err := prompt.Run()
 
 		if err != nil {
-			fmt.Printf("Prompt search failed %v\n", err)
+			fmt.Printf("Prompt search exit %v\n", err)
 			return
 		}
 
