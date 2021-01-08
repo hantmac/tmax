@@ -1,3 +1,9 @@
+                 _
+                | |_ _ __ ___   __ ___  __
+                | __| '_ ` _ \ / _` \ \/ /
+                | |_| | | | | | (_| |>  <
+                 \__|_| |_| |_|\__,_/_/\_\
+
 ### What is `tmax`?
 
 The positioning of `tmax` is a command line tool with a little artificial intelligence. 
