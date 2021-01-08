@@ -33,14 +33,15 @@ k8s:
 - allnode: kubectl get no
 - alldeploy: kubectl get deploy
 - allpod: kubectl get pod -A
+- getns: kubectl get ns
 - busyboxrun: kubectl run busybox --rm -ti --image=busybox /bin/sh
 - allnodeip: kubectl get node -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.addresses[0].address}{'\n'}{end}"
 - podResource: kubectl get pod -o custom-columns=NAME:metadata.name,podIP:status.podIP,hostIp:spec.containers[0].resources | grep 8Gi
 custom:
 - check: curl 127.0.0.1:8080/@in/api/health
 unix:
-- 'tar': 'tar -xvjf test.tar.bz2'
-- 'netutils': 'yum install net-tools -y'
+- 'tar': tar -xvjf test.tar.bz2
+- 'netutils': yum install net-tools -y
 `
 
 // generateCmd represents the generate command
