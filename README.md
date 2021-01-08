@@ -68,7 +68,7 @@ At this moment, `tmax` appeared, it will solve the problem just mentioned.
 If you clearly know the key you want to execute the command, you can use directly mode.
 Use 'tmxa somekey' , example: `tmax check` will execute `curl 127.0.0.1:8080/health`
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1gmgj2gk1n7g31u40u0wr0.gif)
+![](https://media.giphy.com/media/RDo2WcJkTC0FKRN90B/giphy.gif)
 
 
 #### search mdoe
@@ -78,10 +78,10 @@ you can use the search mode to find and execute it.
 
 Use `tmax s CONTENTOFCMD`, example: `tmax s pod` or `tmax search pod`.
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1gmgjtnunfzg31qp0u0x3w.gif)
+![](https://media.giphy.com/media/35GSDu1daAo1Tnox6w/giphy.gif)
 
 #### interactive search mode
 If you don't want to search, tmax has interactive mode.
 Just type `tmax` and `enter` to interactive mode.
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1gmgk55zgudg31tp0u0x2o.gif)
+![](https://media.giphy.com/media/LKvKeVYj3FinUeiwlu/giphy.gif)
