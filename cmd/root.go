@@ -30,10 +30,7 @@ import (
 )
 
 var (
-	cfgFile  string
-
-	version  string
-	revision string
+	cfgFile string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -51,7 +48,7 @@ If you frequently deal with the terminal daily, tmax will greatly improve your w
 			core.Executor(core.Args[strings.Join(args, " ")])
 		} else {
 			fmt.Println("interactive mode")
-			fmt.Printf("tmax %s (rev-%s)\n", version, revision)
+			fmt.Printf("tmax %s \n", setting.Version)
 			fmt.Println("Please use `exit` or `Ctrl-D` to exit this program.")
 			//interactive mode
 			p := prompt.New(
@@ -85,11 +82,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tmax.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", setting.FileName, "config file (default is $HOME/.tmax.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -117,5 +110,3 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
-
-

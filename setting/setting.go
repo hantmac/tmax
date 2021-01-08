@@ -8,4 +8,5 @@ import (
 var (
 	homedirStr, _ = homedir.Dir()
  	FileName = path.Join(homedirStr, ".tmax.yaml")
+ 	Version = "v0.0.1"
 )
