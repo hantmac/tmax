@@ -17,7 +17,19 @@ If you frequently deal with the terminal daily, tmax will greatly improve your w
 - Make your very long cmd short
 
 ### How tmax works?
-Firstly, you need to `tmax generate` to generate a config file in `$HOME/.tmax.yaml` and the file look like as follows:
+
+#### build tmax
+
+For liunx and macos you can install tmax as follows.
+
+Use `make build` and you will get `tmax` in the directory.
+
+``
+chmod +x tmax && cp tmax /usr/local/bin
+``
+
+#### Before using tmax
+Then, you need to `tmax generate` to generate a config file in `$HOME/.tmax.yaml` and the file look like as follows:
 ```yaml
 custom:
 - check: curl 127.0.0.1:8080/health
