@@ -39,7 +39,8 @@ k8s:
 custom:
 - check: curl 127.0.0.1:8080/@in/api/health
 unix:
-- '': ''
+- 'tar': 'tar -xvjf test.tar.bz2'
+- 'netutils': 'yum install net-tools -y'
 `
 
 // generateCmd represents the generate command
