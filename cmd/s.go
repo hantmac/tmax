@@ -17,19 +17,17 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/lithammer/fuzzysearch/fuzzy"
 	"github.com/manifoldco/promptui"
+	"github.com/spf13/cobra"
 	"strings"
 	"tmax/internal/core"
-
-	"github.com/spf13/cobra"
 )
 
-// searchCmd represents the search command
-var searchCmd = &cobra.Command{
-	Use:   "search",
+// sCmd represents the s command
+var sCmd = &cobra.Command{
+	Use:   "s",
 	Short: "search a command you want",
-	Long:  `example: tmax search node, you will get a command that contains 'node'`,
+	Long:  `example: tmax s node, you will get a command that contains 'node'`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("searching and use `Ctrl-c` to exit this program")
@@ -54,26 +52,15 @@ var searchCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(searchCmd)
+	rootCmd.AddCommand(sCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// searchCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// sCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// searchCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-func GetFuzzySearchResult(searchStr string) []string {
-	s := make([]string, 0)
-	for _, v := range core.Args {
-		s = append(s, v)
-	}
-	searchResult := fuzzy.Find(searchStr, s)
-
-	return searchResult
-
+	// sCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
