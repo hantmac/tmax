@@ -46,7 +46,6 @@ k8s:
 - getns: kubectl get ns
 - createdemo: kubectl create deployment nginx --image=nginx
 - exposedemo: kubectl expose deployment nginx --port=80
-- pronacos: nacos.zmlearn.com
 - getnetwork: kubectl get networkpolicy
 - runbox: kubectl run busybox --rm -ti --image=busybox /bin/sh
 unix:
