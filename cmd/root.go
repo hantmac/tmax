@@ -45,7 +45,7 @@ If you frequently deal with the terminal daily, tmax will greatly improve your w
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
 			fmt.Println(core.Args[strings.Join(args, " ")])
-			core.Executor(core.Args[strings.Join(args, " ")])
+			core.Executor(core.Args[args[0]], args[1:]...)
 		} else {
 			fmt.Println("interactive mode")
 			fmt.Printf("tmax %s \n", setting.Version)

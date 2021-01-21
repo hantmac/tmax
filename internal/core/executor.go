@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"text/template"
 	"tmax/internal/debug"
 )
 
@@ -24,10 +25,7 @@ func ExecutorForInteractive(s string) {
 	Executor(Args[s])
 }
 
-func Executor(s string) {
-
-	fmt.Println(s)
-
+func Executor(s string, args ...string) {
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return
@@ -36,6 +34,17 @@ func Executor(s string) {
 		os.Exit(0)
 		return
 	}
+
+	if len(args) > 0 {
+		argsMap, err := buildArgs(args)
+		if err != nil {
+			fmt.Printf("Failed to build args: %s\n", err)
+		}
+
+		s, err = parseCommand(s, argsMap)
+	}
+
+	fmt.Println(s)
 
 	cmd := exec.Command("/bin/sh", "-c", s)
 	cmd.Stdin = os.Stdin
@@ -64,4 +73,37 @@ func ExecuteAndGetResult(s string) string {
 	}
 	r := string(out.Bytes())
 	return r
+}
+
+func buildArgs(args []string) (map[string]string, error) {
+	fieldsCount := len(args)
+	if fieldsCount/2 == 0 {
+		return nil, fmt.Errorf("wrong params")
+	}
+
+	res := make(map[string]string)
+	for i := 0; i < fieldsCount; i += 2 {
+		res[trimArgs(args[i])] = args[i+1]
+	}
+
+	return res, nil
+}
+
+func trimArgs(s string) string {
+	return strings.TrimPrefix(strings.TrimPrefix(s, "-"), "-")
+}
+
+func parseCommand(input string, args map[string]string) (string, error) {
+	var b strings.Builder
+
+	tmpl, err := template.New("tmpl").Parse(input)
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(&b, args)
+	if err != nil {
+		return "", err
+	}
+
+	return b.String(), nil
 }
