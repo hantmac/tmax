@@ -41,7 +41,12 @@ func Executor(s string, args ...string) {
 			fmt.Printf("Failed to build args: %s\n", err)
 		}
 
+		old := s
 		s, err = parseCommand(s, argsMap)
+
+		if s == old {
+			s = fmt.Sprintf("%s %s", s, strings.Join(args, " "))
+		}
 	}
 
 	fmt.Println(s)
