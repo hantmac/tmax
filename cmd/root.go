@@ -39,7 +39,8 @@ var rootCmd = &cobra.Command{
 	Short: "tmax get the cmd you want at lightning speed",
 	Long: `The positioning of tmax is a command line tool with a little artificial intelligence. 
 If you frequently deal with the terminal daily, tmax will greatly improve your work efficiency.`,
-	Args: cobra.ArbitraryArgs,
+	Args:               cobra.ArbitraryArgs,
+	DisableFlagParsing: true,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
