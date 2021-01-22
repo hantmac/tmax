@@ -19,46 +19,46 @@ func ExecutorForInteractive(s string) {
 	} else if s == "quit" || s == "exit" {
 		fmt.Println("Bye!")
 		os.Exit(0)
-		return
 	}
 
 	Executor(Args[s])
 }
 
-func Executor(s string, args ...string) {
-	s = strings.TrimSpace(s)
-	if s == "" {
-		return
-	} else if s == "quit" || s == "exit" {
-		fmt.Println("Bye!")
-		os.Exit(0)
+func Executor(name string, args ...string) {
+	name = strings.TrimSpace(name)
+	if name == "" {
 		return
 	}
 
 	if len(args) > 0 {
 		argsMap, err := buildArgs(args)
 		if err != nil {
-			fmt.Printf("Failed to build args: %s\n", err)
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to build args: %s\n", err)
+			os.Exit(1)
 		}
 
-		old := s
-		s, err = parseCommand(s, argsMap)
+		origin := name
+		name, err = parseCommand(name, argsMap)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to parse command: %s\n", err)
+			os.Exit(1)
+		}
 
-		if s == old {
-			s = fmt.Sprintf("%s %s", s, strings.Join(args, " "))
+		if name == origin {
+			name = fmt.Sprintf("%s %s", name, strings.Join(args, " "))
 		}
 	}
 
-	fmt.Println(s)
+	fmt.Println(name)
 
-	cmd := exec.Command("/bin/sh", "-c", s)
+	cmd := exec.Command("/bin/sh", "-c", name)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("Got error: %s\n", err.Error())
+		_, _ = fmt.Fprintf(os.Stderr, "Failed to excute command: %s\n", err)
+		os.Exit(1)
 	}
-	return
 }
 
 func ExecuteAndGetResult(s string) string {
@@ -80,28 +80,65 @@ func ExecuteAndGetResult(s string) string {
 	return r
 }
 
+// buildArgs accepts a series of arguments and generates a key-value map.
+// e.g. "-a b -c=d -e --f g" => {"a": "b", "c": "d", "e": "true", "f": "g"}
 func buildArgs(args []string) (map[string]string, error) {
 	fieldsCount := len(args)
-	if fieldsCount/2 == 0 {
-		return nil, fmt.Errorf("wrong params")
-	}
+	res := make(map[string]string, fieldsCount)
+	for i := 0; i < fieldsCount; {
+		arg := args[i]
+		if !isNewFlag(arg) {
+			fmt.Errorf("wrong params")
+		}
 
-	res := make(map[string]string)
-	for i := 0; i < fieldsCount; i += 2 {
-		res[trimArgs(args[i])] = args[i+1]
+		k, v, ok := extractKV(arg)
+		if ok {
+			res[k] = v
+			i += 1
+			continue
+		}
+
+		if i == fieldsCount-1 {
+			res[trimArg(arg)] = "true"
+			break
+		}
+
+		nextArg := args[i+1]
+		if isNewFlag(nextArg) {
+			res[trimArg(arg)] = "true"
+			i += 1
+			continue
+		}
+
+		res[trimArg(args[i])] = nextArg
+		i += 2
 	}
 
 	return res, nil
 }
 
-func trimArgs(s string) string {
-	return strings.TrimPrefix(strings.TrimPrefix(s, "-"), "-")
+func isNewFlag(arg string) bool {
+	return strings.HasPrefix(arg, "-")
 }
 
-func parseCommand(input string, args map[string]string) (string, error) {
+func extractKV(arg string) (string, string, bool) {
+	kv := strings.Split(arg, "=")
+	if len(kv) != 2 {
+		return arg, "", false
+	}
+
+	return trimArg(kv[0]), kv[1], true
+}
+
+// trimArg removes the "-" or "--" prefix of the given argument.
+func trimArg(arg string) string {
+	return strings.TrimPrefix(strings.TrimPrefix(arg, "-"), "-")
+}
+
+func parseCommand(name string, args map[string]string) (string, error) {
 	var b strings.Builder
 
-	tmpl, err := template.New("tmpl").Parse(input)
+	tmpl, err := template.New("tmpl").Parse(name)
 	if err != nil {
 		return "", err
 	}
