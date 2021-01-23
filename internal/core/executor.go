@@ -88,7 +88,7 @@ func buildArgs(args []string) (map[string]string, error) {
 	for i := 0; i < fieldsCount; {
 		arg := args[i]
 		if !isNewFlag(arg) {
-			fmt.Errorf("wrong params")
+			return nil, fmt.Errorf("wrong params")
 		}
 
 		k, v, ok := extractKV(arg)
