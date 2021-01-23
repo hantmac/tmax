@@ -7,7 +7,8 @@ import (
 	"os/exec"
 	"strings"
 	"text/template"
-	"tmax/internal/debug"
+
+	"github.com/Masterminds/sprig"
 )
 
 // ExecutorForInteractive find real cmd and exec it
@@ -56,7 +57,7 @@ func Executor(name string, args ...string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Failed to excute command: %s\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Failed to execute command: %s\n", err)
 		os.Exit(1)
 	}
 }
@@ -64,7 +65,7 @@ func Executor(name string, args ...string) {
 func ExecuteAndGetResult(s string) string {
 	s = strings.TrimSpace(s)
 	if s == "" {
-		debug.Log("you need to pass the something arguments")
+		// debug.Log("you need to pass the something arguments")
 		return ""
 	}
 
@@ -73,7 +74,7 @@ func ExecuteAndGetResult(s string) string {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = out
 	if err := cmd.Run(); err != nil {
-		debug.Log(err.Error())
+		// debug.Log(err.Error())
 		return ""
 	}
 	r := string(out.Bytes())
@@ -138,7 +139,8 @@ func trimArg(arg string) string {
 func parseCommand(name string, args map[string]string) (string, error) {
 	var b strings.Builder
 
-	tmpl, err := template.New("tmpl").Parse(name)
+	tmpl, err := template.New("tmpl").Funcs(template.FuncMap(sprig.FuncMap())).Parse(name)
+
 	if err != nil {
 		return "", err
 	}
@@ -149,3 +151,4 @@ func parseCommand(name string, args map[string]string) (string, error) {
 
 	return b.String(), nil
 }
+
