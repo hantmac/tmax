@@ -28,7 +28,7 @@ import (
 var addCmd = &cobra.Command{
 	Use:   "add <short command> <full command>",
 	Short: "add command to tmax.yaml",
-	Long: "add a command to tmax.yaml",
+	Long: "add a command to tmax.yaml. <short command> is grouped, a command named 'a.b' means adding command b to group a",
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		s := store.Store()
