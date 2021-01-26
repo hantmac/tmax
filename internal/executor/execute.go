@@ -1,7 +1,6 @@
-package core
+package executor
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,27 +8,27 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig"
+
+	"tmax/internal/store"
 )
 
-// ExecutorForInteractive find real cmd and exec it
-func ExecutorForInteractive(s string) {
-
-	s = strings.TrimSpace(s)
-	if s == "" {
+func Execute(name string, args ...string) {
+	name = strings.TrimSpace(name)
+	if name == "" {
 		return
-	} else if s == "quit" || s == "exit" {
+	} else if name == "quit" || name == "exit" {
 		fmt.Println("Bye!")
 		os.Exit(0)
 	}
 
-	Executor(Args[s])
-}
-
-func Executor(name string, args ...string) {
-	name = strings.TrimSpace(name)
-	if name == "" {
-		return
+	s := store.Store()
+	longName, ok := s.GetFullCommand(name)
+	if !ok {
+		fmt.Printf("command not found: %s\n", name)
+		os.Exit(1)
 	}
+
+	name = longName
 
 	if len(args) > 0 {
 		argsMap, err := buildArgs(args)
@@ -60,25 +59,6 @@ func Executor(name string, args ...string) {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed to execute command: %s\n", err)
 		os.Exit(1)
 	}
-}
-
-func ExecuteAndGetResult(s string) string {
-	s = strings.TrimSpace(s)
-	if s == "" {
-		// debug.Log("you need to pass the something arguments")
-		return ""
-	}
-
-	out := &bytes.Buffer{}
-	cmd := exec.Command("/bin/sh", "-c", s)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = out
-	if err := cmd.Run(); err != nil {
-		// debug.Log(err.Error())
-		return ""
-	}
-	r := string(out.Bytes())
-	return r
 }
 
 // buildArgs accepts a series of arguments and generates a key-value map.
@@ -151,4 +131,3 @@ func parseCommand(name string, args map[string]string) (string, error) {
 
 	return b.String(), nil
 }
-

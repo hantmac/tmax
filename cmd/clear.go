@@ -17,35 +17,32 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
-	"tmax/internal/core"
+
 	"tmax/setting"
 )
-
-var rmTmaxYaml = "rm " + setting.FileName
 
 // clearCmd represents the clear command
 var clearCmd = &cobra.Command{
 	Use:   "clear",
-	Short: "rm ~/.tmax.yaml",
-	Long:  `rm ~/.tmax.yaml`,
+	Short: "remove .tmax.yaml",
+	Long:  `remove .tmax.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		core.Executor(rmTmaxYaml)
-
-		fmt.Println("remove ~/.tmax.yaml success, you can re-generate it by tmax generate")
+		deleteConfig()
+		fmt.Println("remove .tmax.yaml succeeded, you can re-generate it by running 'tmax generate'")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(clearCmd)
+}
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// clearCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// clearCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+func deleteConfig() {
+	err := os.Remove(setting.ConfigPath)
+	if err != nil && !os.IsNotExist(err) {
+		fmt.Printf("can not delete file %s: %s\n", setting.ConfigPath, err)
+		os.Exit(1)
+	}
 }
