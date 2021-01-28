@@ -17,20 +17,15 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/c-bata/go-prompt"
 	"github.com/c-bata/go-prompt/completer"
 	"github.com/spf13/cobra"
-	"os"
-	"strings"
-	"tmax/internal/core"
-	"tmax/setting"
 
-	homedir "github.com/mitchellh/go-homedir"
-	"github.com/spf13/viper"
-)
-
-var (
-	cfgFile string
+	"tmax/internal/executor"
+	"tmax/internal/store"
+	"tmax/version"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -41,24 +36,26 @@ var rootCmd = &cobra.Command{
 If you frequently deal with the terminal daily, tmax will greatly improve your work efficiency.`,
 	Args:               cobra.ArbitraryArgs,
 	DisableFlagParsing: true,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
-			fmt.Println(core.Args[strings.Join(args, " ")])
-			core.Executor(core.Args[args[0]], args[1:]...)
+			executor.Execute(args[0], args[1:]...)
 		} else {
-			fmt.Println("interactive mode")
-			fmt.Printf("tmax %s \n", setting.Version)
-			fmt.Println("Please use `exit` or `Ctrl-D` to exit this program.")
+			fmt.Printf("tmax %s \n", version.Version)
+			fmt.Println("Use exit or Ctrl-D (i.e. EOF) to exit")
 			//interactive mode
 			p := prompt.New(
-				core.ExecutorForInteractive,
-				core.Complete,
-				prompt.OptionTitle("tmax: interactive client"),
+				func(name string) {executor.Execute(name)},
+				complete,
+				prompt.OptionTitle("tmax: interactive mode"),
 				prompt.OptionPrefix(">>> "),
 				prompt.OptionInputTextColor(prompt.Cyan),
 				prompt.OptionCompletionWordSeparator(completer.FilePathCompletionSeparator),
+				prompt.OptionSetExitCheckerOnInput(func(in string, breakline bool) bool {
+					if breakline {
+						return in == "quit" || in == "exit"
+					}
+					return false
+				}),
 			)
 			p.Run()
 		}
@@ -75,39 +72,21 @@ func Execute() {
 	}
 }
 
-func init() {
-	cobra.OnInitialize(initConfig)
-	core.Args = core.TransferYamlToMap(setting.FileName)
+func complete(d prompt.Document) []prompt.Suggest {
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	var s []prompt.Suggest
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", setting.FileName, "config file (default is $HOME/.tmax.yaml)")
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		// Search config in home directory with name ".tmax.yaml" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".tmax.yaml")
+	t := []prompt.Suggest{
+		{Text: "exit", Description: "exit"},
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	st := store.Store()
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	for k, v := range st.Shortcuts() {
+		s = append(s, prompt.Suggest{Text: k, Description: v})
 	}
+
+	s = append(s, t...)
+
+	return prompt.FilterFuzzy(s, d.GetWordBeforeCursor(), true)
 }

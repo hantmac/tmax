@@ -17,50 +17,33 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/google/martian/log"
-	"github.com/spf13/cobra"
+	"io/ioutil"
 	"os"
-	"tmax/internal/core"
+
+	"github.com/spf13/cobra"
+
 	"tmax/setting"
 )
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "generate default cmd config",
-	Long:  `generate default cmd config`,
+	Short: "generate default config",
+	Long:  `generate default config, it will override the current config if existing`,
 	Run: func(cmd *cobra.Command, args []string) {
-		GenerateTmaxYaml()
+		GenerateConfig()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func GenerateTmaxYaml() {
-	if core.ExistFile(setting.FileName) {
-		log.Errorf("the .tmax.yaml already exist")
-		return
-	}
-	f, err := os.Create(setting.FileName)
+func GenerateConfig() {
+	err := ioutil.WriteFile(setting.ConfigPath, []byte(setting.DefaultConf), os.ModePerm)
 	if err != nil {
-		log.Errorf("open tmax.yaml failed")
-		return
-	} else {
-		_, err = f.Write([]byte(setting.TmaxDefaultConf))
+		fmt.Printf("can not generate file %s\n", setting.ConfigPath)
+		os.Exit(1)
 	}
-	defer f.Close()
-
-	fmt.Println(" tmax.yaml generated in ~/.tmax.yaml")
+	fmt.Println(".tmax.yaml generated in ~/.tmax.yaml")
 }

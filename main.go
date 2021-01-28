@@ -17,11 +17,8 @@ package main
 
 import (
 	"tmax/cmd"
-	"tmax/internal/debug"
 )
 
 func main() {
-	defer debug.Teardown()
-
 	cmd.Execute()
 }
