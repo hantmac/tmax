@@ -55,13 +55,13 @@ func (s *store) Shortcuts() Shortcuts {
 	return s.shortcuts
 }
 
-func (s *store) AddCommand(key, value string) error {
+func (s *store) AddRecord(key, value string) error {
 	ks := strings.Split(key, ".")
 	group := ks[0]
 	if len(ks) == 1 {
 		group = defaultGroupName
 	}
-	s.addCommandToGroup(ks[len(ks)-1], value, group)
+	s.addRecordToGroup(ks[len(ks)-1], value, group)
 
 	data, err := yaml.Marshal(s.groupedShortcuts)
 	if err != nil {
@@ -71,7 +71,7 @@ func (s *store) AddCommand(key, value string) error {
 	return ioutil.WriteFile(setting.ConfigPath, data, os.ModePerm)
 }
 
-func (s *store) addCommandToGroup(key, value, group string) {
+func (s *store) addRecordToGroup(key, value, group string) {
 	g, ok := s.groupedShortcuts[group]
 	if !ok {
 		g = make(map[string]interface{})

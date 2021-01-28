@@ -26,13 +26,13 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add <short command> <full command>",
+	Use:   "add <shortcut> <full-command>",
 	Short: "add command to tmax.yaml",
-	Long: "add a command to tmax.yaml. <short command> is grouped, a command named 'a.b' means adding command b to group a",
-	Args: cobra.MinimumNArgs(2),
+	Long: "add a command shortcut to tmax.yaml. A shortcut named 'a.b' means adding shortcut b to group a",
+	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		s := store.Store()
-		err := s.AddCommand(args[0], args[1])
+		err := s.AddRecord(args[0], args[1])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
