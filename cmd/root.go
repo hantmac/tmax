@@ -23,9 +23,9 @@ import (
 	"github.com/c-bata/go-prompt/completer"
 	"github.com/spf13/cobra"
 
-	"tmax/internal/executor"
-	"tmax/internal/store"
-	"tmax/version"
+	"github.com/hantmac/tmax/internal/executor"
+	"github.com/hantmac/tmax/internal/store"
+	"github.com/hantmac/tmax/version"
 )
 
 // rootCmd represents the base command when called without any subcommands

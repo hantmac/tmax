@@ -25,7 +25,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 
-	"tmax/internal/store"
+	"github.com/hantmac/tmax/internal/store"
 )
 
 // searchCmd represents the search command

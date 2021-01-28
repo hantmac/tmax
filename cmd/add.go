@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"tmax/internal/store"
+	"github.com/hantmac/tmax/internal/store"
 )
 
 // addCmd represents the add command

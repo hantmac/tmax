@@ -1,4 +1,4 @@
-module tmax
+module github.com/hantmac/tmax
 
 go 1.13
 

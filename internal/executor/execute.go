@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"tmax/internal/store"
+	"github.com/hantmac/tmax/internal/store"
 )
 
 func Execute(name string, args ...string) {

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cast"
 	"gopkg.in/yaml.v2"
 
-	"tmax/setting"
+	"github.com/hantmac/tmax/setting"
 )
 
 const defaultGroupName = "default"

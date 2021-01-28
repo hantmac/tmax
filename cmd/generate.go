@@ -22,7 +22,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"tmax/setting"
+	"github.com/hantmac/tmax/setting"
 )
 
 // generateCmd represents the generate command

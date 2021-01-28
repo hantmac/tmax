@@ -16,7 +16,7 @@ limitations under the License.
 package main
 
 import (
-	"tmax/cmd"
+	"github.com/hantmac/tmax/cmd"
 )
 
 func main() {
