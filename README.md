@@ -32,24 +32,24 @@ chmod +x tmax && cp tmax /usr/local/bin
 Then, you need to `tmax generate` to generate a config file in `$HOME/.tmax.yaml` and the file look like as follows:
 ```yaml
 custom:
-- check: curl 127.0.0.1:8080/health
+  check: curl 127.0.0.1:8080/health
 k8s:
-- filternodecpu: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"
-- filternodetaint: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.spec.taints[*].key}{'\n'}{end}"
-- corednsedit: kubectl edit cm coredns -nkube-system
-- allnode: kubectl get no
-- alldeploy: kubectl get deploy
-- allpod: kubectl get pod -A
-- busyboxrun: kubectl run busybox --rm -ti --image=busybox /bin/sh
-- allnodeip: kubectl get node -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.addresses[0].address}{'\n'}{end}"
-- podResource: kubectl get pod -o custom-columns=NAME:metadata.name,podIP:status.podIP,hostIp:spec.containers[0].resources
-- getns: kubectl get ns
-- createdemo: kubectl create deployment nginx --image=nginx
-- exposedemo: kubectl expose deployment nginx --port=80
-- getnetwork: kubectl get networkpolicy
-- runbox: kubectl run busybox --rm -ti --image=busybox /bin/sh
+  filternodecpu: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"
+  filternodetaint: kubectl get nodes -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.spec.taints[*].key}{'\n'}{end}"
+  corednsedit: kubectl edit cm coredns -nkube-system
+  allnode: kubectl get no
+  alldeploy: kubectl get deploy
+  allpod: kubectl get pod -A
+  busyboxrun: kubectl run busybox --rm -ti --image=busybox /bin/sh
+  allnodeip: kubectl get node -o=jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.status.addresses[0].address}{'\n'}{end}"
+  podResource: kubectl get pod -o custom-columns=NAME:metadata.name,podIP:status.podIP,hostIp:spec.containers[0].resources
+  getns: kubectl get ns
+  createdemo: kubectl create deployment nginx --image=nginx
+  exposedemo: kubectl expose deployment nginx --port=80
+  getnetwork: kubectl get networkpolicy
+  runbox: kubectl run busybox --rm -ti --image=busybox /bin/sh
 unix:
-- "tar": "tar -xjvf test.tar.bz2"
+  "tar": "tar -xjvf test.tar.bz2"
 
 ```
 As you can see, there are many long commands those hard to keep in your mind. 
