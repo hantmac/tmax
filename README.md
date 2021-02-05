@@ -28,7 +28,7 @@ Use `make build` and you will get `tmax` in the directory.
 chmod +x tmax && cp tmax /usr/local/bin
 ``
 
-### install tmax
+### Install tmax
 - go get
 If you have golang environment, use `go get` to install tmax
 ```shell script
