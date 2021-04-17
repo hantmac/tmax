@@ -119,7 +119,7 @@ tmax taintnode YOUR_NODE_NAME
 ```
 
 
-#### search mdoe
+#### search mode
 
 If you know the general content of the command you want to execute, 
 you can use the search mode to find and execute it.
