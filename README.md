@@ -133,3 +133,9 @@ If you don't want to search, tmax has interactive mode.
 Just type `tmax` and `enter` to interactive mode.
 
 ![](https://media.giphy.com/media/LKvKeVYj3FinUeiwlu/giphy.gif)
+
+
+
+### Support
+
+[![jetbrains](https://s1.ax1x.com/2020/03/26/G9uQoR.png)]( https://www.jetbrains.com/?from=tmax)
