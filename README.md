@@ -106,7 +106,7 @@ You can freely customize your own tmax configuration file according to the requi
 You should notice that custom parameters can only be appended after the `tmax` command. 
 If you want to add a variable parameter in the middle, you can't use it. 
 For example, if you want to make a taint for a k8s node, and this taint is commonly used by your company,
- you must execute `kubectl taint node node-1.1.1.1reserved=mynode:NoSchedule`, 
+ you must execute `kubectl taint node node-1.1.1.1 reserved=mynode:NoSchedule`, 
  and the name of the node will become a variable The parameters and the taint name are fixed, so the good way is to enter the node name to complete the command. 
  Don't panic, `tmax` supports template parameters. For the above command we can add in `~/.tmax.yaml`:
  ```shell script
@@ -115,9 +115,18 @@ taintnode: kubectl taint node {{.n}} reserved=cd-staging:NoSchedule
 
 Just execute the following content to complete the `taint` command:
 ```shell script
-tmax taintnode YOUR_NODE_NAME
+tmax taintnode -n YOUR_NODE_NAME
 ```
 
+or you have an `exec` cmd like:
+ ```shell script
+exec: kubectl exec -it {{.p}} -- sh
+```
+
+Just execute the following cmd to exec into a pod:
+```shell script
+tmax exec -p YOUR_POD_NAME
+```
 
 #### search mode
 
