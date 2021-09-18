@@ -13,7 +13,8 @@ func Execute(name string, args ...string) {
 	name = strings.TrimSpace(name)
 	if name == "" {
 		return
-	} else if name == "quit" || name == "exit" {
+	}
+	if name == "quit" || name == "exit" {
 		fmt.Println("Bye!")
 		os.Exit(0)
 	}

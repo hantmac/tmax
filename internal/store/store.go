@@ -17,7 +17,7 @@ const defaultGroupName = "default"
 type Shortcuts map[string]string
 
 type store struct {
-	groups []string
+	groups []string // TODO: unused
 	shortcuts Shortcuts
 	groupedShortcuts map[string]interface{}
 }
@@ -149,7 +149,7 @@ func flatten(key string, value interface{}, store map[string]string) {
 	}
 }
 
-// flatten converts a nested dict like {a: {b: c}, d: e} to a flatten one {a.b: c, d: e}
+// Flatten converts a nested dict like {a: {b: c}, d: e} to a flatten one {a.b: c, d: e}
 func Flatten(data map[string]interface{}) map[string]string {
 	seed := make(map[string]string)
 	flatten("", data, seed)

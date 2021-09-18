@@ -1,8 +1,9 @@
 package setting
 
 import (
-	"github.com/mitchellh/go-homedir"
 	"path"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 var (
