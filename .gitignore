@@ -19,7 +19,6 @@ wheels/
  ./Gromit
 .installed.cfg
 MANIFEST
-.vscode/
 
 *.manifest
 *.spec
@@ -85,8 +84,6 @@ node_modules/
 
 .docks
 .docs
-
-logs/
 tmp/
 _book/
 .idea
