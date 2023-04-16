@@ -86,7 +86,7 @@ At this moment, `tmax` appeared, it will solve the problem just mentioned.
 
 #### directly mode
 If you clearly know the key you want to execute the command, you can use directly mode.
-Use 'tmxa somekey' , example: `tmax check` will execute `curl 127.0.0.1:8080/health`
+Use 'tmax somekey' , example: `tmax check` will execute `curl 127.0.0.1:8080/health`
 
 ![](https://media.giphy.com/media/RDo2WcJkTC0FKRN90B/giphy.gif)
 
